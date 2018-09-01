@@ -6,6 +6,22 @@ var logger = require('morgan');
 
 var bodyParser = require('body-parser');
 
+var mysql      = require('mysql');
+
+
+
+
+var newConnection=function () {
+    var connection = mysql.createConnection({
+        host     : '127.0.0.1',
+        user     : 'root',
+        password : '1212',
+        database : 'nodelogin'
+    });
+    connection.connect();
+    return connection;
+
+}
 
 
 var indexRouter = require('./routes/index');
@@ -18,6 +34,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+app.set('con',newConnection());
 
 app.use(logger('dev'));
 app.use(express.json());
