@@ -2,26 +2,22 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var session = require('express-session')
 var logger = require('morgan');
+
 
 var bodyParser = require('body-parser');
 
 var mysql      = require('mysql');
 
 
-
-
-var newConnection=function () {
-    var connection = mysql.createConnection({
-        host     : '127.0.0.1',
-        user     : 'root',
-        password : '1212',
-        database : 'nodelogin'
-    });
-    connection.connect();
-    return connection;
-
-}
+var pool  = mysql.createPool({
+    connectionLimit : 10,
+    host     : '127.0.0.1',
+    user     : 'root',
+    password : '1212',
+    database : 'nodelogin'
+});
 
 
 var indexRouter = require('./routes/index');
@@ -34,12 +30,22 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.set('con',newConnection());
+app.set('pool',pool);
+var sessionChecker =function (req,res) {
+    if (!req.session.user) {
+        res.redirect('/');
+    }
+};
+app.set('sessionChecker',sessionChecker);
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(
+    session({secret : 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD',
+        resave: false,
+        saveUninitialized: true}));
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
