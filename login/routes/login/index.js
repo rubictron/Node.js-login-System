@@ -41,6 +41,7 @@ router.post('/logincontroller', function (req, res, next) {
                 } else {
                     req.session.user = true;
                     req.session.role = results[0].role;
+                    req.session.username = results[0].username;
                     res.redirect('/dashboard');
                 }
             }
