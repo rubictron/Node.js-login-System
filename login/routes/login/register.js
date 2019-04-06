@@ -29,7 +29,7 @@ router.post('/controller', function (req, res, next) {
         text: 'Your Confirmation Code is (' + r + ')'
     };
 
-    console.log(q);
+    console.log(r);
     req.app.get('pool').getConnection(function (err, connection) {
         if (err) throw err;
 
@@ -79,8 +79,8 @@ var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: '<Your Email Address Hear>',
-        pass: '<Password for the above Email Address>'
+        user: 'p.asithasandakelum@gmail.com',
+        pass: '950871784'
     }
 });
 
